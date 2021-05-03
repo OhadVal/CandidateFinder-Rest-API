@@ -33,14 +33,13 @@ def create_app():
 
     from models.candidate import CandidateSchema
     from models.job import JobSchema
-    from models.skill import SkillSchema
 
     template = spec.to_flasgger(app, definitions=[CandidateSchema, JobSchema])
 
     # set the UIVERSION to 3
     app.config['SWAGGER'] = {'uiversion': 3}
 
-    # start Flasgger using a template from apispec
+    # start Flasgger using a template from APISpec
     swag = Swagger(app, template=template)
     # endregion
 
