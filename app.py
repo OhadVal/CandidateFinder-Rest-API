@@ -2,12 +2,19 @@ from flask import Flask
 from api.Skill.skill_api import *
 from api.Job.job_api import *
 from api.Candidate.candidate_api import *
+from database import db, ma
+from models.candidate import CandidateSchema
+from models.job import JobSchema
+# Swagger imports
+from flasgger import APISpec, Swagger
+from apispec.ext.marshmallow import MarshmallowPlugin
+from apispec_webframeworks.flask import FlaskPlugin
 
 
 def create_app():
+    # ---------- App Configuration ----------
     app = Flask(__name__)
     app.config.from_object('config.Config')  # Load configurations from Config class
-    from database import db, ma
 
     # Init SQLAlchemy and Marshmallow
     db.init_app(app)
@@ -18,10 +25,7 @@ def create_app():
     app.register_blueprint(job_blueprint, url_prefix='/api/')
     app.register_blueprint(skill_blueprint, url_prefix='/api/')
 
-    # region ---------- Swagger ----------
-    from flasgger import APISpec, Swagger
-    from apispec.ext.marshmallow import MarshmallowPlugin
-    from apispec_webframeworks.flask import FlaskPlugin
+    # ---------- Swagger ----------
 
     # Create an APISpec
     spec = APISpec(
@@ -30,18 +34,13 @@ def create_app():
         openapi_version='2.0',
         plugins=[FlaskPlugin(), MarshmallowPlugin()]
     )
-
-    from models.candidate import CandidateSchema
-    from models.job import JobSchema
-
     template = spec.to_flasgger(app, definitions=[CandidateSchema, JobSchema])
 
-    # set the UIVERSION to 3
+    # Set the UIVERSION to 3
     app.config['SWAGGER'] = {'uiversion': 3}
 
-    # start Flasgger using a template from APISpec
+    # Start Flasgger using a template from APISpec
     swag = Swagger(app, template=template)
-    # endregion
 
     return app
 
