@@ -8,15 +8,17 @@ Tech Stack:
   - SQLite
   - flassger (flask swagger)
 
-### How to create Database if needed (Python)
+### How to create/delete Database if needed (Python)
 
 ```python
 from app import create_app
 from models.database import db
+
+# Delete DB 
+db.drop_all(app=create_app())
+
 # Create new DB
 db.create_all(app=create_app()) 
-# Delete DB
-db.drop_all(app=create_app()) # in order to delete existing database
 ```
  
  
