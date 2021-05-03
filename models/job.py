@@ -1,5 +1,6 @@
 from database import db, ma
 from models.linking_tables_many_to_many_relationships import job_skills
+from models.skill import skill_schema
 
 
 class Job(db.Model):
@@ -17,6 +18,9 @@ class JobSchema(ma.SQLAlchemySchema):
         model = Job
         fields = ('job_id', 'title', 'skills')
         include_fk = True
+
+    skills = ma.Nested(skill_schema, many=True)
+    link = ma.Hyperlinks(ma.URLFor("job_api.job_detail_by_id", values=dict(id="<job_id>")))
 
 
 # Init Schema
