@@ -8,7 +8,7 @@ Tech Stack:
   - SQLite
   - flassger (flask swagger)
 
-### How to create/delete Database if needed (Python)
+### How to create/delete Database (Python)
 
 ```python
 from app import create_app
